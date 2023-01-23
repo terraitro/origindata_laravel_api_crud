@@ -20,7 +20,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return response(ProjectResource::collection(Project::query()->get()));
+        return response(ProjectResource::collection(Project::query()->with('companies', 'employees')->get()));
     }
 
     /**
@@ -49,7 +49,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return response(new ProjectResource($project));
+        return response(new ProjectResource($project->load('companies', 'employees')));
     }
 
     /**
