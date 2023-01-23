@@ -2,7 +2,7 @@ version: "3.8"
 services:
 
     #PHP Service
-    php:
+    phpservice:
         build:
             context: .
             target: php
@@ -19,6 +19,17 @@ services:
         depends_on:
             - database
 
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        ports:
+            - '8081:80'
+        environment:
+            - PMA_HOST=database
+        depends_on:
+            - database
+            - phpservice
+
     #Database
     database:
         image: mysql:8.0
@@ -31,16 +42,6 @@ services:
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
         volumes:
             - db-data:/var/lib/mysql
-
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        restart: always
-        ports:
-            - '8081:80'
-        environment:
-            - PMA_HOST=database
-        depends_on:
-            -   database
 
 volumes:
     db-data: ~
